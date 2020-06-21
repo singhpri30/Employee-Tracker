@@ -16,10 +16,11 @@ const startPrompt = () => {
                 'View All Employees by Department',
                 'View All Employees by Manager',
                 'Add Employee',
+                'Add Department',
+                'Add Role',
                 'Remove Employee',
                 'Update Employee Role',
                 'Update Employee Manager',
-                'Update Employee Role',
                 'exit',
             ],
         })
@@ -31,18 +32,24 @@ const startPrompt = () => {
                 case 'View All Employees by Department':
                     viewAllEmployeesByDepartment();
                     break;
-
+                case 'View All Employees by Manager':
+                    viewAllEmployeesByManager();
+                    break;
                 case 'Add Employee':
                     addEmployee();
                     break;
-
-                // case 'Find data within a specific range':
-                //     rangeSearch();
-                //     break;
-
-                // case 'Search for a specific song':
-                //     songSearch();
-                //     break;
+                case 'Add Department':
+                    addDepartment();
+                    break;
+                case 'Add Role':
+                    addRole();
+                    break;
+                case 'Remove Employee':
+                    removeEmployee();
+                    break;
+                case 'Update Employee Role':
+                    updateEmployeeRole();
+                    break;
 
                 case 'exit':
                     break;
@@ -53,21 +60,6 @@ const startPrompt = () => {
 
 startPrompt();
 
-// const artistSearch = () => {
-//     inquirer
-//         .prompt({
-//             name: 'artist',
-//             type: 'input',
-//             message: 'What artist would you like to search for?',
-//         })
-//         .then(function (answer) {
-//             database.getSongsByArtist(answer.artist).then((response) => {
-//                 console.table(response);
-//             });
-//             startPrompt();
-//         });
-// };
-
 const viewAllEmployees = () => {
     database.allEmployees().then((response) => {
         console.table(response);
@@ -77,7 +69,14 @@ const viewAllEmployees = () => {
 };
 
 const viewAllEmployeesByDepartment = () => {
-    database.allEmployeesDepartment().then((response) => {
+    database.employeesByDepartment().then((response) => {
+        console.table(response);
+        startPrompt();
+    });
+
+};
+const viewAllEmployeesByManager = () => {
+    database.employeesByManager().then((response) => {
         console.table(response);
         startPrompt();
     });
@@ -125,7 +124,7 @@ const addEmployee = () => {
                 ],
             },
         ])
-        .then(function (answer) {
+        .then((answer) => {
             if (answer.role === "Sales Manager") {
                 answer.role = 1;
             }
@@ -170,28 +169,70 @@ const addEmployee = () => {
             startPrompt();
         });
 
-    // database.addEmp().then((response) => {
-    //     console.table(response);
-    //     startPrompt();
-    // });
-    // connection.query("select * from employee", (err, res) => {
-    //     if (err) throw err
-    //     console.log(res);
-    //     res.forEach((row) => {
-    //         console.table(row);
-    //     })
-    //     console.table(res);
-    // });
+};
+
+const addDepartment = () => {
+    inquirer
+        .prompt([
+            {
+                name: 'name',
+                type: 'input',
+                message: 'Enter department name: '
+
+            },
+        ])
+        .then((answer) => {
+
+            database.addDept(answer.name).then((response) => {
+
+                console.table(response);
+            });
+            startPrompt();
+        });
 
 };
 
-// function afterConnection() {
-//     connection.query('SELECT * FROM songs', function (err, res) {
-//         if (err) throw err;
-//         console.log(res);
-//         res.forEach((row) => {
-//             console.log(row.id, row.title, row.artist, row.genre);
-//         })
+const removeEmployee = () => {
+    inquirer
+        .prompt([
+            {
+                name: 'id',
+                type: 'input',
+                message: "Enter the id of an employee to delete ",
+            },
+        ])
+        .then((answer) => {
 
-//     });
-// }
+            database.removeEmp(answer.id).then((response) => {
+
+                console.table(response);
+            });
+            startPrompt();
+        });
+
+};
+
+const updateEmployeeRole = () => {
+    inquirer
+        .prompt([
+            {
+                name: 'employeeId',
+                type: 'input',
+                message: "Enter employee id",
+            },
+            {
+                name: 'roleId',
+                type: 'input',
+                message: "Enter role id",
+            },
+        ])
+        .then((answer) => {
+
+            database.updateEmpRole(answer.employeeId, answer.roleId).then((response) => {
+
+                console.table(response);
+            });
+        });
+
+};
+

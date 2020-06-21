@@ -12,10 +12,19 @@ class DB {
         );
     }
 
-    allEmployeesDepartment() {
+    employeesByDepartment() {
         return this.connection.query(
             "select employee.id,employee.first_name,employee.last_name,department.name As department from employee left join emp_role on emp_role.id=employee.role_id left join department on emp_role.department_id=department.id;"
 
+        );
+    }
+
+    employeesByManager() {
+        return this.connection.query(
+            // "select employee.id," +
+            // "concat(employee.first_name" + "  " + ", employee.last_name) AS Employee," +
+            // "manager.name AS Manager from employee left join manager on employee.manager_id=manager.id;"
+            "select employee.id ,employee.first_name,employee.last_name,manager.name AS Manager from employee left join manager on employee.manager_id=manager.id;"
         );
     }
     addEmp(firstName, lastName, role, manager) {
@@ -32,25 +41,27 @@ class DB {
         );
     }
 
-    //     // addRoles() {
-    //     //     return this.connection.query(
-    //     //         "SELECT artist FROM songs GROUP BY ARTIST having COUNT(*) > 1;",
-    //     //     );
-    //     // }
+    addDept(name) {
+        return this.connection.query(
+            "insert into department set ?",
+            { name: name }
 
-    //     // addEmployees(start, end) {
-    //     //     return this.connection.query(
-    //     //         "SELECT * FROM songs where position BETWEEN ? AND ?;",
-    //     //         [start, end]
-    //     //     );
-    //     // }
+        );
+    }
+    removeEmp(id) {
+        return this.connection.query(
+            "delete from employee where id=?",
+            [id]
 
-    //     // getSongsByTitle(title) {
-    //     //     return this.connection.query(
-    //     //         "SELECT * FROM songs WHERE song = ?;",
-    //     //         [title],
-    //     //     );
-    //     // }
+        );
+    }
+
+    updateEmpRole(roleId, employeeId,) {
+        return this.connection.query(
+            "update employee set role_id=? where id=?",
+            [roleId, employeeId],
+        );
+    }
 
 }
 module.exports = DB;

@@ -28,6 +28,9 @@ const startPrompt = () => {
                 case 'View All Employees':
                     viewAllEmployees();
                     break;
+                case 'View All Employees by Department':
+                    viewAllEmployeesByDepartment();
+                    break;
 
                 case 'Add Employee':
                     addEmployee();
@@ -70,16 +73,17 @@ const viewAllEmployees = () => {
         console.table(response);
         startPrompt();
     });
-    // connection.query("select * from employee", (err, res) => {
-    //     if (err) throw err
-    //     console.log(res);
-    //     res.forEach((row) => {
-    //         console.table(row);
-    //     })
-    //     console.table(res);
-    // });
 
 };
+
+const viewAllEmployeesByDepartment = () => {
+    database.allEmployeesDepartment().then((response) => {
+        console.table(response);
+        startPrompt();
+    });
+
+};
+
 const addEmployee = () => {
     inquirer
         .prompt([
@@ -110,14 +114,56 @@ const addEmployee = () => {
                     'IT Manager',
                 ],
             },
+            {
+                name: 'manager',
+                type: 'list',
+                message: "Select manager name: ",
+                choices: [
+                    'Jeff Firrelli',
+                    'Leslie Thompson',
+                    'None'
+                ],
+            },
         ])
         .then(function (answer) {
-            console.log(answer.firstName);
             if (answer.role === "Sales Manager") {
                 answer.role = 1;
             }
-            console.log(answer.role);
-            database.addEmp(answer.firstName, answer.lastName, answer.role).then((response) => {
+            else if (answer.role === "Software Engineer") {
+                answer.role = 2;
+            }
+            else if (answer.role === "Team Lead") {
+                answer.role = 3;
+            }
+            else if (answer.role === "Support Engineer") {
+                answer.role = 4;
+            }
+            else if (answer.role === "Manager") {
+                answer.role = 5;
+            }
+            else if (answer.role === "Software Test Engineer") {
+                answer.role = 6;
+            }
+            else if (answer.role === "Assistant Manager") {
+                answer.role = 7;
+            }
+            else if (answer.role === "Admin") {
+                answer.role = 8;
+            }
+            else if (answer.role === "IT Manager") {
+                answer.role = 9;
+            };
+            if (answer.manager === 'Jeff Firrelli') {
+                answer.manager = 3
+            }
+            else if (answer.manager === 'Leslie Thompson') {
+                answer.manager = 4
+            }
+            else if (answer.manager === 'None') {
+                answer.manager = null;
+            }
+
+            database.addEmp(answer.firstName, answer.lastName, answer.role, answer.manager).then((response) => {
 
                 console.table(response);
             });
@@ -138,6 +184,7 @@ const addEmployee = () => {
     // });
 
 };
+
 // function afterConnection() {
 //     connection.query('SELECT * FROM songs', function (err, res) {
 //         if (err) throw err;

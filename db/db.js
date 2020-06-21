@@ -7,23 +7,26 @@ class DB {
 
     allEmployees() {
         return this.connection.query(
-            "select * from employee"
+            "select employee.id,employee.first_name,employee.last_name,emp_role.title,emp_role.salary,department.name As department,manager.name AS Manager from employee left join emp_role on emp_role.id=employee.role_id left join department on emp_role.department_id=department.id left join manager on employee.manager_id=manager.id;"
 
         );
     }
-    addEmp(firstName, lastName, role) {
+
+    allEmployeesDepartment() {
         return this.connection.query(
-            // "insert into employee (first_name,last_name,role_id,manager_id) values(?);",
-            // {
-            //     first_name: firstName,
-            //     last_name: lastName,
-            //     role_id: role
-            // }
+            "select employee.id,employee.first_name,employee.last_name,department.name As department from employee left join emp_role on emp_role.id=employee.role_id left join department on emp_role.department_id=department.id;"
+
+        );
+    }
+    addEmp(firstName, lastName, role, manager) {
+        return this.connection.query(
             "insert into employee set ?",
             {
                 first_name: firstName,
                 last_name: lastName,
-                role_id: role
+                role_id: role,
+                manager_id: manager
+
             }
 
         );

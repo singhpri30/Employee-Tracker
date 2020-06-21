@@ -12,6 +12,20 @@ class DB {
         );
     }
 
+    viewAllRoles() {
+        return this.connection.query(
+            "SELECT * FROM emp_role;"
+
+        );
+    }
+
+    viewAllDepartments() {
+        return this.connection.query(
+            "SELECT * FROM department;"
+
+        );
+    }
+
     employeesByDepartment() {
         return this.connection.query(
             "select employee.id,employee.first_name,employee.last_name,department.name As department from employee left join emp_role on emp_role.id=employee.role_id left join department on emp_role.department_id=department.id;"
@@ -48,6 +62,17 @@ class DB {
 
         );
     }
+    addRole(title, salary, department_id) {
+        return this.connection.query(
+            "insert into emp_role set ?",
+            {
+                title: title,
+                salary: salary,
+                department_id: department_id
+            }
+
+        );
+    }
     removeEmp(id) {
         return this.connection.query(
             "delete from employee where id=?",
@@ -55,6 +80,22 @@ class DB {
 
         );
     }
+    removeRole(id) {
+        return this.connection.query(
+            "delete from emp_role where id=?",
+            [id]
+
+        );
+    }
+    removeDepartment(id) {
+        return this.connection.query(
+            "delete from department where id=?",
+            [id]
+
+        );
+    }
+
+
 
     updateEmpRole(roleId, employeeId,) {
         return this.connection.query(

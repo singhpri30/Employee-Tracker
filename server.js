@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const DB = require("./db/db");
-const cTable = require('console.table');
+const cTable = require("console.table");
 const connection = require("./db/connection");
 
 const database = new DB();
@@ -8,60 +8,90 @@ const database = new DB();
 const startPrompt = () => {
     inquirer
         .prompt({
-            name: 'action',
-            type: 'list',
-            message: 'What would you like to do?',
+            name: "action",
+            type: "list",
+            message: "What would you like to do?",
             choices: [
-                'View All Employees',
-                'View All Employees by Department',
-                'View All Employees by Manager',
-                'Add Employee',
-                'Add Department',
-                'Add Role',
-                'Remove Employee',
-                'Update Employee Role',
-                'Update Employee Manager',
-                'exit',
+                "View All Employees",
+                "View All Roles",
+                "View All Departments",
+                "View All Employees by Department",
+                "View All Employees by Manager",
+                "Add Employee",
+                "Add Department",
+                "Add Role",
+                "Update Employee Role",
+                "Update Employee Manager",
+                "Remove Employee",
+                "Remove Role",
+                "Remove Department",
+                "exit",
             ],
         })
         .then(function (answer) {
             switch (answer.action) {
-                case 'View All Employees':
+                case "View All Employees":
                     viewAllEmployees();
                     break;
-                case 'View All Employees by Department':
+                case "View All Roles":
+                    viewAllRoles();
+                    break;
+                case "View All Departments":
+                    viewAllDepartments();
+                    break;
+                case "View All Employees by Department":
                     viewAllEmployeesByDepartment();
                     break;
-                case 'View All Employees by Manager':
+                case "View All Employees by Manager":
                     viewAllEmployeesByManager();
                     break;
-                case 'Add Employee':
+                case "Add Employee":
                     addEmployee();
                     break;
-                case 'Add Department':
+                case "Add Department":
                     addDepartment();
                     break;
-                case 'Add Role':
+                case "Add Role":
                     addRole();
                     break;
-                case 'Remove Employee':
-                    removeEmployee();
-                    break;
-                case 'Update Employee Role':
+                case "Update Employee Role":
                     updateEmployeeRole();
                     break;
+                case "Remove Employee":
+                    removeEmployee();
+                    break;
+                case "Remove Role":
+                    removeRole();
+                    break;
+                case "Remove Department":
+                    removeDepartment();
+                    break;
 
-                case 'exit':
+                case "exit":
                     break;
             }
         });
 };
 
 
-startPrompt();
+
 
 const viewAllEmployees = () => {
     database.allEmployees().then((response) => {
+        console.table(response);
+        startPrompt();
+    });
+
+};
+const viewAllRoles = () => {
+    database.viewAllRoles().then((response) => {
+        console.table(response);
+        startPrompt();
+    });
+
+};
+const viewAllDepartments = () => {
+    database.viewAllDepartments().then((response) => {
         console.table(response);
         startPrompt();
     });
@@ -87,40 +117,40 @@ const addEmployee = () => {
     inquirer
         .prompt([
             {
-                name: 'firstName',
-                type: 'input',
-                message: 'Enter employee first name: '
+                name: "firstName",
+                type: "input",
+                message: "Enter employee first name: "
 
             },
             {
-                name: 'lastName',
-                type: 'input',
-                message: 'Enter employee last name: '
+                name: "lastName",
+                type: "input",
+                message: "Enter employee last name: "
             },
             {
-                name: 'role',
-                type: 'list',
-                message: "Enter employee's role: ",
+                name: "role",
+                type: "list",
+                message: "Enter employee,s role: ",
                 choices: [
-                    'Sales Manager',
-                    'Software Engineer',
-                    'Team Lead',
-                    'Support Engineer',
-                    'Manager',
-                    'Software Test Engineer',
-                    'Assistant Manager',
-                    'Admin',
-                    'IT Manager',
+                    "Sales Manager",
+                    "Software Engineer",
+                    "Team Lead",
+                    "Support Engineer",
+                    "Manager",
+                    "Software Test Engineer",
+                    "Assistant Manager",
+                    "Admin",
+                    "IT Manager",
                 ],
             },
             {
-                name: 'manager',
-                type: 'list',
+                name: "manager",
+                type: "list",
                 message: "Select manager name: ",
                 choices: [
-                    'Jeff Firrelli',
-                    'Leslie Thompson',
-                    'None'
+                    "Jeff Firrelli",
+                    "Leslie Thompson",
+                    "None"
                 ],
             },
         ])
@@ -152,13 +182,13 @@ const addEmployee = () => {
             else if (answer.role === "IT Manager") {
                 answer.role = 9;
             };
-            if (answer.manager === 'Jeff Firrelli') {
+            if (answer.manager === "Jeff Firrelli") {
                 answer.manager = 3
             }
-            else if (answer.manager === 'Leslie Thompson') {
+            else if (answer.manager === "Leslie Thompson") {
                 answer.manager = 4
             }
-            else if (answer.manager === 'None') {
+            else if (answer.manager === "None") {
                 answer.manager = null;
             }
 
@@ -166,7 +196,7 @@ const addEmployee = () => {
 
                 console.table(response);
             });
-            startPrompt();
+            viewAllEmployees();
         });
 
 };
@@ -175,9 +205,9 @@ const addDepartment = () => {
     inquirer
         .prompt([
             {
-                name: 'name',
-                type: 'input',
-                message: 'Enter department name: '
+                name: "name",
+                type: "input",
+                message: "Enter department name: "
 
             },
         ])
@@ -187,7 +217,41 @@ const addDepartment = () => {
 
                 console.table(response);
             });
-            startPrompt();
+            viewAllDepartments();
+        });
+
+};
+
+const addRole = () => {
+    inquirer
+        .prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "Enter role's title",
+
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "Enter role's salary "
+
+            },
+            {
+                name: "department_id",
+                type: "input",
+                message: "Enter department id: "
+
+            },
+        ])
+        .then((answer) => {
+            console.log(answer);
+
+            database.addRole(answer.title, answer.salary, answer.department_id).then((response) => {
+
+                console.table(response);
+            });
+            viewAllRoles();
         });
 
 };
@@ -196,9 +260,9 @@ const removeEmployee = () => {
     inquirer
         .prompt([
             {
-                name: 'id',
-                type: 'input',
-                message: "Enter the id of an employee to delete ",
+                name: "id",
+                type: "input",
+                message: "Enter employee id",
             },
         ])
         .then((answer) => {
@@ -207,22 +271,61 @@ const removeEmployee = () => {
 
                 console.table(response);
             });
-            startPrompt();
+            viewAllEmployees();
         });
 
 };
 
+const removeRole = () => {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Enter role id ",
+            },
+        ])
+        .then((answer) => {
+
+            database.removeRole(answer.id).then((response) => {
+
+                console.table(response);
+            });
+            viewAllRoles();
+        });
+
+};
+
+const removeDepartment = () => {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Enter department id ",
+            },
+        ])
+        .then((answer) => {
+
+            database.removeDepartment(answer.id).then((response) => {
+
+                console.table(response);
+            });
+            viewAllDepartments();
+        });
+
+};
 const updateEmployeeRole = () => {
     inquirer
         .prompt([
             {
-                name: 'employeeId',
-                type: 'input',
+                name: "employeeId",
+                type: "input",
                 message: "Enter employee id",
             },
             {
-                name: 'roleId',
-                type: 'input',
+                name: "roleId",
+                type: "input",
                 message: "Enter role id",
             },
         ])
@@ -236,3 +339,4 @@ const updateEmployeeRole = () => {
 
 };
 
+startPrompt();

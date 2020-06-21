@@ -41,6 +41,13 @@ class DB {
             "select employee.id ,employee.first_name,employee.last_name,manager.name AS Manager from employee left join manager on employee.manager_id=manager.id;"
         );
     }
+    viewTotalDeptBudget() {
+        return this.connection.query(
+            "select department.name AS Department_Name, emp_role.department_id,  sum(emp_role.salary) AS Dept_Budget from emp_role join department on emp_role.department_id=department.id group by emp_role.department_id order by Dept_Budget desc ;"
+        );
+
+
+    }
     addEmp(firstName, lastName, role, manager) {
         return this.connection.query(
             "insert into employee set ?",
@@ -95,12 +102,17 @@ class DB {
         );
     }
 
-
-
-    updateEmpRole(roleId, employeeId,) {
+    updateEmpRole(id, roleId) {
         return this.connection.query(
             "update employee set role_id=? where id=?",
-            [roleId, employeeId],
+            [roleId, id],
+        );
+    }
+    updateEmpManager(id, managerId) {
+        return this.connection.query(
+            "update employee set manager_id=? where id=?",
+            [managerId, id]
+
         );
     }
 

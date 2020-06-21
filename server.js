@@ -17,6 +17,7 @@ const startPrompt = () => {
                 "View All Departments",
                 "View All Employees by Department",
                 "View All Employees by Manager",
+                "View Total Department Budget",
                 "Add Employee",
                 "Add Department",
                 "Add Role",
@@ -57,6 +58,9 @@ const startPrompt = () => {
                 case "Update Employee Role":
                     updateEmployeeRole();
                     break;
+                case "Update Employee Manager":
+                    updateEmployeeManager();
+                    break;
                 case "Remove Employee":
                     removeEmployee();
                     break;
@@ -67,6 +71,9 @@ const startPrompt = () => {
                     removeDepartment();
                     break;
 
+                case "View Total Department Budget":
+                    viewTotalDeptBudget();
+                    break;
                 case "exit":
                     break;
             }
@@ -319,7 +326,7 @@ const updateEmployeeRole = () => {
     inquirer
         .prompt([
             {
-                name: "employeeId",
+                name: "id",
                 type: "input",
                 message: "Enter employee id",
             },
@@ -331,11 +338,44 @@ const updateEmployeeRole = () => {
         ])
         .then((answer) => {
 
-            database.updateEmpRole(answer.employeeId, answer.roleId).then((response) => {
+            database.updateEmpRole(answer.id, answer.roleId).then((response) => {
+
+                console.table(response);
+                viewAllEmployees();
+            });
+        });
+
+};
+const updateEmployeeManager = () => {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Enter employee id",
+            },
+            {
+                name: "managerId",
+                type: "list",
+                message: "Select manager id ",
+                choices: [3, 4, 9]
+            },
+        ])
+        .then((answer) => {
+            database.updateEmpManager(answer.id, answer.managerId).then((response) => {
 
                 console.table(response);
             });
+            viewAllEmployeesByManager();
         });
+
+};
+
+const viewTotalDeptBudget = () => {
+    database.viewTotalDeptBudget().then((response) => {
+        console.table(response);
+        startPrompt();
+    });
 
 };
 

@@ -39,6 +39,7 @@ Developers are often tasked with creating interfaces that make it easy for non-d
   * Role ID.
 * Select *Remove Department* to remove department, the user has to provide the following information
   * Department ID.
+* Select *Exit* to exit the application.
   
   
 

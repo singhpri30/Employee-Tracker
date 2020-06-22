@@ -26,7 +26,7 @@ const startPrompt = () => {
                 "Remove Employee",
                 "Remove Role",
                 "Remove Department",
-                "exit",
+                "Exit",
             ],
         })
         .then(function (answer) {
@@ -74,7 +74,8 @@ const startPrompt = () => {
                 case "View Total Department Budget":
                     viewTotalDeptBudget();
                     break;
-                case "exit":
+                case "Exit":
+                    exit();
                     break;
             }
         });
@@ -377,5 +378,10 @@ const viewTotalDeptBudget = () => {
     });
 
 };
+const exit = () => {
+    console.log("Good Bye!!")
+
+};
+
 
 startPrompt();

@@ -29,3 +29,9 @@ create table employee(
     FOREIGN KEY (role_id) REFERENCES emp_role(id),
     FOREIGN KEY (manager_id) REFERENCES emp_role(id)
 );
+
+create table manager(
+    id integer,
+    name varchar(50),
+    FOREIGN KEY (id) REFERENCES employee(id)
+)

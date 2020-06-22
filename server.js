@@ -252,7 +252,6 @@ const addRole = () => {
             },
         ])
         .then((answer) => {
-            console.log(answer);
 
             database.addRole(answer.title, answer.salary, answer.department_id).then((response) => {
 

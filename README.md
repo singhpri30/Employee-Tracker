@@ -14,14 +14,10 @@ Developers are often tasked with creating interfaces that make it easy for non-d
 * Select *Add Employee* to add employee, the user has to provide the following information
   * Employee first_name.
   * Employee last_name.
-  * Select role from the options.
-  * select manager name from the options.
+  * Role ID.
+  * Manager ID.
 * Select *Add Department* to add a department, the user has to provide the following information
   * Department name.
-* Select *Add Role* to add a role, the user has to provide the following information
-  * Title.
-  * Salary.
-  * Department ID.
 * Select *Add Role* to add a role, the user has to provide the following information
   * Title.
   * Salary.
@@ -44,7 +40,8 @@ Developers are often tasked with creating interfaces that make it easy for non-d
   
 
 ## App Screenshot
-![employee_tracker](https://user-images.githubusercontent.com/60719350/85238199-6b343180-b3fa-11ea-8451-f5b5c2304693.gif)
+![employee_tracker](https://user-images.githubusercontent.com/60719350/85911425-28f06300-b7f3-11ea-80fb-95a296d30d37.gif)
+
 
 
 ## Install App

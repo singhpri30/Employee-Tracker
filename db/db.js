@@ -5,6 +5,19 @@ class DB {
         this.connection = connection;
     }
 
+    allManager() {
+        return this.connection.query(
+            "select * from manager;"
+
+        );
+    }
+
+    viewEmployees() {
+        return this.connection.query(
+            "select * from employee;"
+        )
+    }
+
     allEmployees() {
         return this.connection.query(
             "select employee.id,employee.first_name,employee.last_name,emp_role.title,emp_role.salary,department.name As department,manager.name AS Manager from employee left join emp_role on emp_role.id=employee.role_id left join department on emp_role.department_id=department.id left join manager on employee.manager_id=manager.id;"
@@ -48,14 +61,14 @@ class DB {
 
 
     }
-    addEmp(firstName, lastName, role, manager) {
+    addEmp(firstName, lastName, roleId, managerId) {
         return this.connection.query(
             "insert into employee set ?",
             {
                 first_name: firstName,
                 last_name: lastName,
-                role_id: role,
-                manager_id: manager
+                role_id: roleId,
+                manager_id: managerId
 
             }
 

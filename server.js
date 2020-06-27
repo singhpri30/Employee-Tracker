@@ -82,8 +82,6 @@ const startPrompt = () => {
 };
 
 
-
-
 const viewAllEmployees = () => {
     database.allEmployees().then((response) => {
         console.table(response);
@@ -91,6 +89,7 @@ const viewAllEmployees = () => {
     });
 
 };
+
 const viewAllRoles = () => {
     database.viewAllRoles().then((response) => {
         console.table(response);
@@ -121,86 +120,113 @@ const viewAllEmployeesByManager = () => {
 
 };
 
+// async function addEmployee() {
+//     const roles = await database.viewAllRoles();
+//     console.log(roles);
+//     const managers = await database.allManager();
+//     console.log(managers);
+
+//     const employee = await inquirer.prompt([
+//         {
+//             name: "first_name",
+//             type: "input",
+//             message: "Enter employee first name: "
+
+//         },
+//         {
+//             name: "last_name",
+//             type: "input",
+//             message: "Enter employee last name: "
+//         },
+
+
+//     ])
+//     console.log(employee);
+
+//     const rolearray = [];
+
+//     const roleChoices = roles.map(({ id, title }) => ({
+//         name: title,
+//         value: id
+//     }));
+//     console.log(roleChoices);//ok
+
+
+//     const { roleId } = await inquirer.prompt([
+//         {
+//             name: "value",
+//             type: "list",
+//             message: "Select employee's role: ",
+//             choices: roleChoices,
+//         },
+//     ]);
+//     // for (i = 0; i < roleChoices.length; i++) {
+//     //     let title = roleChoices[i].name;
+//     //     let id = roleChoices[i].value;
+//     //     console.log(id, title);
+//     //     rolearray.push(title);
+//     //     console.log(rolearray);
+//     // }
+
+//     console.log(roleId);//undefined
+
+
+
+
+//     employee.role_id = roleId;
+
+//     const managerChoices = managers.map(({ id, name }) => ({
+//         name: name,
+//         value: id
+
+//     }));
+//     managerChoices.unshift({ name: "None", value: "null" });
+//     const { managerId } = await inquirer.prompt([
+//         {
+//             name: "id",
+//             type: "list",
+//             message: "Select employee's manager: ",
+//             choices: managerChoices,
+//         },
+//     ]);
+//     console.log(managerId);
+//     employee.manager_id = managerId;
+//     database.addEmp(employee);
+//     viewAllEmployees();
+// };
+
+
 const addEmployee = () => {
     inquirer
         .prompt([
             {
                 name: "firstName",
                 type: "input",
-                message: "Enter employee first name: "
+                message: "Enter employee first name: ",
 
             },
             {
                 name: "lastName",
                 type: "input",
                 message: "Enter employee last name: "
+
             },
             {
-                name: "role",
-                type: "list",
-                message: "Enter employee,s role: ",
-                choices: [
-                    "Sales Manager",
-                    "Software Engineer",
-                    "Team Lead",
-                    "Support Engineer",
-                    "Manager",
-                    "Software Test Engineer",
-                    "Assistant Manager",
-                    "Admin",
-                    "IT Manager",
-                ],
+                name: "roleId",
+                type: "input",
+                message: "Enter role id: "
+
             },
             {
-                name: "manager",
-                type: "list",
-                message: "Select manager name: ",
-                choices: [
-                    "Jeff Firrelli",
-                    "Leslie Thompson",
-                    "None"
-                ],
+                name: "managerId",
+                type: "input",
+                message: "Enter manager id: "
+
             },
         ])
         .then((answer) => {
-            if (answer.role === "Sales Manager") {
-                answer.role = 1;
-            }
-            else if (answer.role === "Software Engineer") {
-                answer.role = 2;
-            }
-            else if (answer.role === "Team Lead") {
-                answer.role = 3;
-            }
-            else if (answer.role === "Support Engineer") {
-                answer.role = 4;
-            }
-            else if (answer.role === "Manager") {
-                answer.role = 5;
-            }
-            else if (answer.role === "Software Test Engineer") {
-                answer.role = 6;
-            }
-            else if (answer.role === "Assistant Manager") {
-                answer.role = 7;
-            }
-            else if (answer.role === "Admin") {
-                answer.role = 8;
-            }
-            else if (answer.role === "IT Manager") {
-                answer.role = 9;
-            };
-            if (answer.manager === "Jeff Firrelli") {
-                answer.manager = 3
-            }
-            else if (answer.manager === "Leslie Thompson") {
-                answer.manager = 4
-            }
-            else if (answer.manager === "None") {
-                answer.manager = null;
-            }
 
-            database.addEmp(answer.firstName, answer.lastName, answer.role, answer.manager).then((response) => {
+            database.addEmp(answer.firstName, answer.lastName, answer.roleId, answer.managerId).then((response) => {
 
                 console.table(response);
             });
